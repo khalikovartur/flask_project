@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField,\
-                    BooleanField, SubmitField
+    BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email,\
     Regexp, EqualTo
 from wtforms import ValidationError
@@ -74,4 +74,5 @@ class ChangeEmailForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
             raise ValidationError('Email already registered.')
-    
+        
+        

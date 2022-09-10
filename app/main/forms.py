@@ -4,6 +4,7 @@ from wtforms import StringField, SubmitField, TextAreaField, \
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from wtforms import ValidationError
 from .. models import Role, User
+from flask_pagedown.fields import PageDownField
 
 
 class NameForm(FlaskForm):
@@ -23,7 +24,7 @@ class EditProfileAdminForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(),
                                              Length(1, 64),Email()])
     username = StringField('Username', validators=[DataRequired(),
-                Length(1, 64),Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+                Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
                 'Usernames must have only letters, numbers, dots or \
                 underscores.')])
     confirmed = BooleanField('Confirmed')
@@ -49,4 +50,9 @@ class EditProfileAdminForm(FlaskForm):
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already registered')
                     
-            
+
+class PostForm(FlaskForm):
+    body = PageDownField("What's on your mind?",
+                         validators=[DataRequired()])
+    submit = SubmitField('Submit')
+    
