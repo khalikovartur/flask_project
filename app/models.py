@@ -108,6 +108,14 @@ class User(UserMixin, db.Model):
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
     
+    @staticmethod
+    def add_self_follows():
+        for user in User.query.all():
+            if not user.is_following(user):
+                user.follow(user)
+                db.session.add(user)
+                db.session.commit()
+    
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
@@ -250,6 +258,11 @@ class User(UserMixin, db.Model):
             return False
         return self.followers.filter_by(
             follower_id=user.id).first() is not None
+        
+    @property
+    def followed_posts(self):
+        return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
+            .filter(Follow.follower_id == self.id)
     
     def __repr__(self):
         return f"<User '{self.username}, {self.email}'>"
