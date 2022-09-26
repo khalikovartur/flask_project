@@ -271,9 +271,9 @@ class User(UserMixin, db.Model):
             'url': url_for('api.get_user', id=self.id),
             'username': self.username,
             'member_since': self.member_since,
-            'last_since': self.last_seen,
-            'posts_url': url_for('api.get_users_posts', id=self.id),
-            'followed_posts_url': url_for('api.get_users_followed_posts',
+            'last_seen': self.last_seen,
+            'posts_url': url_for('api.get_user_posts', id=self.id),
+            'followed_posts_url': url_for('api.get_user_followed_posts',
                                           id=self.id),
             'post_count': self.posts.count()
         }
