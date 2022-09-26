@@ -9,7 +9,7 @@ from flask import current_app, request, url_for
 from flask_login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
 from . import db, login_manager
-
+ 
 
 class Permission:
     FOLLOW = 1
@@ -282,7 +282,8 @@ class User(UserMixin, db.Model):
     def generate_auth_token(self, expiration):
         token = jwt.encode({
             'id': self.id,
-            'expires_in': expiration},
+            'exp': datetime.datetime.now(tz=datetime.timezone.utc)+
+                datetime.timedelta(seconds=expiration)},
             current_app.config['SECRET_KEY'],
             algorithm="HS256")
         return token
